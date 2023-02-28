@@ -1,0 +1,9 @@
+crypto app 
+I want to build something that makes a post request to the database and makes a get request and displays the data in a neat form lookingf type way. 
+the what we will take here is crypto and investment infor
+the varible sof the table will be price name sector amount
+there will be a radio button for its a or trade three,6 month investment 
+in three months there is an you will recieve an email showing the progress
+
+maybe for the outlook color scheme i will use black and gold and instead of multiple pages we just have two one where the is an above form and next to it is the list of investments info in a list
+
