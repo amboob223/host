@@ -1,44 +1,42 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./db") // because this is whats being exported form module.exports on the otyher page
+const pool = require("./db");
 
+//middleware so apps can talk with eachg other like pg taliing with opisrgress an express and we need the parser too so we use app.use
 
-    //middleware is needed or we will get an error
-    app.use(cors());
-    app.use(express.json());
+app.use(express.json());
+app.use(cors());
 
-//submitting the data
-    app.post("/gsite", async (req,res) =>{
-        try {
-              const {first,last,birthdate,phone,target,email,money,love,other} = req.body // we decontructed the body object in the cleint
-            const newInfo = await pool.query(
-                "INSERT INTO readings(id,first,last,email,phone,birthdate,target,money,love,other) VALUES(nextval('readings_id_seq'),$1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *",
-                [first,last,email,phone,birthdate,target,money,love,other]
-            );      
-            
-            // const id = newInfo.rows[0].id // extract id from retirned row
-
-            // const radio = await pool.query(
-            //     "INSERT INTO readings(money,love,other) VALUES($1,$2,$3) RETURNING *",
-            //     [money,love,other]
-            // )
-     
-            
-            res.json(
-                newInfo.rows
-                // radio: radio.rows
-            )// this is what we sending back to the browser
-  
-        } catch (error) {
-            console.log(error.message)
-            console.log("no")
-        }   
-        })
-
-    app.listen(5000,()=>{
-        console.log("server works")
+//post info
+    app.post("/", async(req,res)=>{
+       try {
+           const {name,price,amount,sector,thmnth,smonth,trade} = req.body
+        const newInfo = await pool.query(
+            "INSERT INTO crypto(id,name,price,amount,sector,thmnth,smonth,trade) VALUES(nextval('crypto_id_seq'),$1,$2,$3,$4,$5,$6,$7) RETURNING *",
+            [name,price,amount,sector,thmnth,smonth,trade]
+        )
+        res.json(newInfo.rows)
+       } catch (error) {
+        console.log(error)
+       } 
     })
 
 
-    
+//get info 
+    app.get("/", async(req,res)=>{
+        try {
+            const allinfo = await pool.query(
+                "SELECT * FROM crypto;"
+            )
+            res.json(allinfo.rows) //.rows reduces what we get back from the query
+        } catch (error) {
+            console.log(error)
+        }
+    }) 
+    // so when you reload the server the chanes get updated 
+
+
+app.listen(5000,()=>{
+    console.log("hello")
+})
